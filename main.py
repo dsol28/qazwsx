@@ -11,16 +11,22 @@ def zxc(user_input):
     return render_template('index4.html', **params)
 @app.route('/index')
 def index():
-    return "И на Марсе будут яблони цвести!"
+    return "И на Марсе будут яблони цвести! "
 @app.route('/image_mars')
 def image_mars():
     return render_template("index.html")
 @app.route('/promotion')
 def promotion():
-    return "Человечество вырастает из детства.    <br>Человечеству мала одна планета.<br>Мы сделаем обитаемыми безжизненные пока планеты.<br>И начнем с Марса!<br>Присоединяйся!"
+    return "Человечество вырастает из детства.     <br>Человечеству мала одна планета.<br>Мы сделаем обитаемыми безжизненные пока планеты.<br>И начнем с Марса!<br>Присоединяйся!"
 @app.route('/promotion_image')
 def promotion_image():
     return render_template("index2.html")
+
+@app.route('/training/<zxc>')
+def training(zxc):
+    return render_template("index5.html", zxc=zxc)
+
+
 @app.route('/asronaut_selection', methods=['GET', 'POST'])
 def asronaut_selection():
     if request.method == 'GET':

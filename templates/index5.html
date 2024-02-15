@@ -1,0 +1,11 @@
+{%extends "base.html"%}
+{% block content %}
+<h4>И на Марсе будут яблони цвести!</h4>
+{% if 'инженер' in zxc or 'строитель' in zxc%}
+<h2>Инженерные тренажеры</h2>
+<img src="{{ url_for('static', filename='ing.png') }}">
+{%else%}
+<h2>Научные симуляторы</h2>
+<img src="{{ url_for('static', filename='sci.png') }}">
+{%endif%}
+{% endblock %}
