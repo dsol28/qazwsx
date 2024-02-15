@@ -25,8 +25,9 @@ def promotion_image():
 @app.route('/training/<zxc>')
 def training(zxc):
     return render_template("index5.html", zxc=zxc)
-
-
+@app.route('/list_prof/<zxc>')
+def list_prof(zxc):
+    return render_template("index6.html", zxc=zxc)
 @app.route('/asronaut_selection', methods=['GET', 'POST'])
 def asronaut_selection():
     if request.method == 'GET':

@@ -1,0 +1,19 @@
+{%extends "base.html"%}
+{% block content %}
+<h2>Список профессий</h2>
+{%if zxc == 'ol'%}
+<ol>
+{%for i in ["инженер","врач","сторитель","пилот","штурман"]%}
+    <li>{{i}}</li>
+
+{%endfor%}
+    </ol>
+{%elif zxc == 'ul'%}
+<ul>
+{%for i in ["инженер","врач","сторитель","пилот","штурман"]%}
+    <li>{{i}}</li>
+
+{%endfor%}
+    </ul>
+{%endif%}
+{% endblock %}
