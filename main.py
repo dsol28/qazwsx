@@ -11,6 +11,8 @@ app.config['SECRET_KEY'] = 'zxczxczxc'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+db_session.global_init("db/mars_explorer.db")
+
 class OldLoginForm(FlaskForm):
     surname = StringField('Имя', validators=[DataRequired()])
     name = StringField('Фамилия', validators=[DataRequired()])
@@ -48,7 +50,7 @@ def login():
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            return redirect("/")
+            return list_prof('ol')
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
