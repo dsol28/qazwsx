@@ -1,13 +1,15 @@
 from flask import Flask, render_template
 from flask import request, redirect
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, EmailField
 from wtforms.validators import DataRequired
-
-
-
+from flask_login import LoginManager, login_user
+from data import db_session
+from data.users import User
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'zxczxczxc'
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 class LoginForm(FlaskForm):
     surname = StringField('Имя', validators=[DataRequired()])
@@ -27,15 +29,37 @@ class LoginForm(FlaskForm):
                                                     ('НЕТ', 'НЕТ')])
     submit = SubmitField('Войти')
 
-@app.route('/answer', methods=['GET', 'POST'])
+class LoginForm(FlaskForm):
+    email = EmailField('Почта', validators=[DataRequired()])
+    password = PasswordField('Пароль', validators=[DataRequired()])
+    remember_me = BooleanField('Запомнить меня')
+    submit = SubmitField('Войти')
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
+
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            return redirect("/")
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
+
+@app.route('/answer', methods=['GET', 'POST'])
+def answer():
     form = LoginForm()
     if form.validate_on_submit():
         return render_template('auto_answer.html', form=form)
     return render_template('login.html', title='Авторизация', form=form)
-
-'''@app_route('/success')
-def success():'''
 
 @app.route('/<user_input>')
 def zxc(user_input):
@@ -75,3 +99,26 @@ def asronaut_selection():
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080)
+
+
+'''
+<!--
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="" method="post" novalidate>
+        <div>
+            {{ form.csrf_token }}
+        </div>
+        {% for field in form if field.name != 'csrf_token' %}
+            <div>
+                {{ field.label() }}
+                {{ field() }}
+                {% for error in field.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </form>
+{% endblock %}
+-->'''
