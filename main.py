@@ -11,7 +11,7 @@ app.config['SECRET_KEY'] = 'zxczxczxc'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-class LoginForm(FlaskForm):
+class OldLoginForm(FlaskForm):
     surname = StringField('Имя', validators=[DataRequired()])
     name = StringField('Фамилия', validators=[DataRequired()])
     education = SelectField('Образование', choices=[('Начальное','Начальное'),
